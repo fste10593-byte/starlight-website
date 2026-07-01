@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For Starlight 🌿</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="leaves-bg" aria-hidden="true">
+    <div class="leaf leaf-1">🍃</div>
+    <div class="leaf leaf-2">🌿</div>
+    <div class="leaf leaf-3">🍃</div>
+    <div class="leaf leaf-4">🌿</div>
+    <div class="leaf leaf-5">🍃</div>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">🌿 For Starlight</div>
+      <nav>
+        <a href="#verse">Bible Verse</a>
+        <a href="#message">Love Note</a>
+        <a href="#meal">Meal Time</a>
+        <a href="#calendar">Calendar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <p class="hero-label">Good morning / evening,</p>
+      <h1 class="hero-title">Hello, <em>Starlight</em> ✨</h1>
+      <p class="hero-sub">This little corner of the internet was made just for you — with love, every single day.</p>
+      <div class="hero-time" id="hero-time"></div>
+    </section>
+
+    <section class="section verse-section" id="verse">
+      <div class="section-label" id="verse-period-label">🌅 Morning Verse</div>
+      <div class="verse-card">
+        <div class="verse-icon">📖</div>
+        <blockquote class="verse-text" id="verse-text"></blockquote>
+        <cite class="verse-ref" id="verse-ref"></cite>
+        <button class="btn-refresh" onclick="loadVerse()">✦ New verse</button>
+      </div>
+    </section>
+
+    <section class="section message-section" id="message">
+      <div class="section-label">💌 A Note From Me</div>
+      <div class="write-panel">
+        <h2 class="panel-title">Leave a message for Starlight</h2>
+        <textarea id="msg-input" class="msg-textarea" placeholder="Write something…" rows="4"></textarea>
+        <button class="btn-save" onclick="saveMessage()">Send 💚</button>
+      </div>
+      <div class="messages-list" id="messages-list"></div>
+    </section>
+
+    <section class="section meal-section" id="meal">
+  <div class="section-label">🍽️ Meal Reminders</div>
+
+  <!-- You send a reminder -->
+  <div class="write-panel">
+    <h2 class="panel-title">Send her a meal reminder</h2>
+    <textarea id="meal-input" class="msg-textarea" placeholder="ni kaon naka lab?" rows="3"></textarea>
+    <button class="btn-save" onclick="saveMealReminder()">Send reminder 💚</button>
+  </div>
+
+  <!-- Reminders list -->
+  <div class="messages-list" id="meal-list"></div>
+
+  <!-- She uploads her meal photo -->
+  <div class="write-panel" style="margin-top: 2rem;">
+    <h2 class="panel-title">📸 send cute pics na kumakain ka</h2>
+    <p style="font-size:0.88rem; color:var(--text-light); margin-bottom:1rem;">Upload a photo of your meal 🍱</p>
+    <input type="file" id="meal-photo" accept="image/*" class="photo-input" />
+    <textarea id="meal-caption" class="msg-textarea" placeholder="write a caption." rows="2" style="margin-top:0.75rem;"></textarea>
+    <button class="btn-save" onclick="saveMealPhoto()">send 📸</button>
+  </div>
+
+  <!-- Meal photo log -->
+  <div class="meal-photo-grid" id="meal-photo-grid"></div>
+
+</section>
+
+    <section class="section calendar-section" id="calendar">
+      <div class="section-label">📅 Calendar</div>
+      <div class="calendar-wrapper">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+          <span class="cal-title" id="cal-title"></span>
+          <button class="cal-nav" onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="cal-weekdays">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+          <span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+      <div class="cal-note-panel">
+        <h3>Add a note to a date</h3>
+        <div class="cal-note-form">
+          <input type="date" id="note-date" class="note-input" />
+          <input type="text" id="note-text" class="note-input" placeholder="e.g. Our anniversary 💚" />
+          <button class="btn-save small" onclick="addCalNote()">Add note</button>
+        </div>
+        <div class="cal-notes-list" id="cal-notes-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Made with 💚 especially for you, Starlight.</p>
+    <p class="footer-verse">"I love you with an everlasting love." — Jeremiah 31:3</p>
+  </footer>
+
+  <div class="notif-popup" id="notif-popup" style="display:none;">
+    <span id="notif-text"></span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
