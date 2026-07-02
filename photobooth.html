@@ -475,9 +475,70 @@
 
   function capturePhoto() {
     if (photoCount >= MAX_PHOTOS) {
-      alert('You already have ' + MAX_PHOTOS + ' photos! Download the strip first 💚');
+      alert('You already have ' + MAX_PHOTOS + ' photos! Delete one first 💚');
       return;
     }
+
+    const flash = document.getElementById('flash');
+    flash.classList.add('active');
+    setTimeout(() => flash.classList.remove('active'), 300);
+
+    const myVideo = document.getElementById('my-video');
+    const remoteVideo = document.getElementById('remote-video');
+
+    const canvas = document.createElement('canvas');
+    const w = 640, h = 240;
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+
+    ctx.filter = currentFilter === 'none' ? 'none' : currentFilter;
+    ctx.drawImage(myVideo, 0, 0, w/2, h);
+    ctx.drawImage(remoteVideo, w/2, 0, w/2, h);
+
+    ctx.filter = 'none';
+    ctx.fillStyle = 'rgba(122,158,126,0.6)';
+    ctx.fillRect(w/2 - 1, 0, 2, h);
+
+    const imgData = canvas.toDataURL('image/png');
+
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:relative; width:100%;';
+
+    const img = document.createElement('img');
+    img.src = imgData;
+    img.className = 'strip-photo';
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '✕';
+    deleteBtn.style.cssText = 'position:absolute; top:6px; right:6px; background:rgba(0,0,0,0.5); color:white; border:none; border-radius:50%; width:26px; height:26px; cursor:pointer; font-size:0.8rem; font-weight:bold;';
+    deleteBtn.onclick = function() {
+      wrapper.remove();
+      photoCount--;
+      document.getElementById('download-btn').style.display = 'none';
+      updateTimestamp();
+    };
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(deleteBtn);
+    document.getElementById('strip-photos').appendChild(wrapper);
+
+    photoCount++;
+    updateTimestamp();
+
+    if (photoCount >= MAX_PHOTOS) {
+      generateDownload();
+    }
+  }
+
+  function updateTimestamp() {
+    if (photoCount > 0) {
+      const now = new Date();
+      document.getElementById('strip-timestamp').textContent = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + ' · ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    } else {
+      document.getElementById('strip-timestamp').textContent = '';
+    }
+  }
 
     // Flash effect
     const flash = document.getElementById('flash');
