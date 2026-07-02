@@ -5,625 +5,615 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Photobooth 📸</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --sage: #7a9e7e;
-      --sage-light: #b5ceb8;
-      --sage-pale: #e8f0e9;
-      --sage-dark: #4a6b4e;
-      --sage-deep: #2d4a31;
-      --cream: #faf8f3;
-      --text-dark: #2a3a2c;
-      --text-mid: #4a5e4c;
-      --text-light: #7a907c;
-      --white: #ffffff;
-      --shadow: 0 4px 24px rgba(74,107,78,0.12);
-      --radius: 16px;
+      --sage: #7a9e7e; --sage-light: #b5ceb8; --sage-pale: #e8f0e9;
+      --sage-dark: #4a6b4e; --cream: #faf8f3; --white: #ffffff;
+      --shadow: 0 4px 24px rgba(74,107,78,0.12); --radius: 16px;
     }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--text-dark);
-      min-height: 100vh;
-    }
-    .header {
-      background: rgba(250,248,243,0.95);
-      border-bottom: 1px solid var(--sage-light);
-      padding: 0 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .header-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-    }
-    .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: var(--sage-dark);
-      text-decoration: none;
-    }
-    main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
-    }
-    .page-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      font-weight: 300;
-      color: var(--sage-deep);
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
-    .page-sub {
-      text-align: center;
-      color: var(--text-light);
-      font-size: 0.95rem;
-      margin-bottom: 2rem;
-    }
+    body { font-family: 'DM Sans', sans-serif; background: #0a0a0a; color: #eee; min-height: 100vh; }
+    .header { background: rgba(10,10,10,0.95); border-bottom: 1px solid #222; padding: 0 2rem; position: sticky; top: 0; z-index: 100; }
+    .header-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--sage-light); text-decoration: none; }
+    main { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 300; color: var(--cream); text-align: center; margin-bottom: 0.5rem; }
+    .page-sub { text-align: center; color: #888; font-size: 0.95rem; margin-bottom: 2rem; }
 
-    /* ROOM PANEL */
-    .room-panel {
-      background: var(--white);
-      border: 1px solid var(--sage-light);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      box-shadow: var(--shadow);
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .room-panel h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
-      font-weight: 400;
-      color: var(--sage-dark);
-      margin-bottom: 1rem;
-    }
-    .room-inputs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-    .room-input {
-      border: 1px solid var(--sage-light);
-      border-radius: 100px;
-      padding: 0.6rem 1.25rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      color: var(--text-dark);
-      background: var(--cream);
-      outline: none;
-      min-width: 200px;
-      text-align: center;
-      letter-spacing: 0.1em;
-    }
+    .room-panel { background: #141414; border: 1px solid #2a2a2a; border-radius: var(--radius); padding: 1.75rem; margin-bottom: 2rem; text-align: center; }
+    .room-panel h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--sage-light); margin-bottom: 0.5rem; }
+    .room-panel p { font-size: 0.88rem; color: #888; margin-bottom: 1rem; }
+    .room-input { border: 1px solid #333; border-radius: 100px; padding: 0.6rem 1.25rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; color: var(--cream); background: #1e1e1e; outline: none; min-width: 220px; text-align: center; margin-bottom: 1rem; }
     .room-input:focus { border-color: var(--sage); }
-    .btn {
-      background: var(--sage);
-      color: var(--white);
-      border: none;
-      border-radius: 100px;
-      padding: 0.6rem 1.5rem;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
-    }
+    .btn-row { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .btn { background: var(--sage); color: white; border: none; border-radius: 100px; padding: 0.6rem 1.5rem; font-size: 0.9rem; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
     .btn:hover { background: var(--sage-dark); }
-    .btn-outline {
-      background: var(--sage-pale);
-      color: var(--sage-dark);
-      border: 1px solid var(--sage-light);
-    }
-    .btn-outline:hover { background: var(--sage-light); }
-    .status-badge {
-      display: inline-block;
-      padding: 0.35rem 1rem;
-      border-radius: 100px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      margin-top: 0.75rem;
-    }
-    .status-waiting { background: #fff3cd; color: #856404; }
-    .status-connected { background: #d4edda; color: #1a5c2b; }
-    .status-error { background: #f8d7da; color: #721c24; }
+    .btn-outline { background: transparent; color: var(--sage-light); border: 1px solid var(--sage); }
+    .btn-outline:hover { background: var(--sage-dark); color: white; }
+    .status-badge { display: inline-block; padding: 0.35rem 1rem; border-radius: 100px; font-size: 0.8rem; font-weight: 500; margin-top: 0.75rem; }
+    .status-waiting { background: #332d00; color: #ffd700; }
+    .status-connected { background: #0d2e1a; color: #4ade80; }
+    .status-error { background: #2e0d0d; color: #f87171; }
 
-    /* VIDEO AREA */
-    .video-area {
-      display: none;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
+    /* STICKER PANEL */
+    .sticker-panel { display: none; background: #141414; border: 1px solid #2a2a2a; border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+    .sticker-panel.visible { display: block; }
+    .panel-label { font-size: 0.75rem; font-weight: 500; color: #888; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; text-align: center; }
+    .sticker-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .sticker-btn { background: #1e1e1e; color: #ccc; border: 1px solid #333; border-radius: 100px; padding: 0.4rem 1rem; font-size: 0.85rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+    .sticker-btn:hover { border-color: var(--sage); color: var(--sage-light); }
+    .sticker-btn.active { background: var(--sage); color: white; border-color: var(--sage); }
+
+    /* FILTER ROW */
+    .filter-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+    .filter-btn { background: #1e1e1e; color: #aaa; border: 1px solid #333; border-radius: 100px; padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+    .filter-btn:hover { border-color: var(--sage); color: var(--sage-light); }
+    .filter-btn.active { background: var(--sage); color: white; border-color: var(--sage); }
+
+    /* VIDEO */
+    .video-area { display: none; gap: 1rem; margin-bottom: 1rem; }
     .video-area.visible { display: grid; grid-template-columns: 1fr 1fr; }
-    .video-box {
-      background: var(--sage-deep);
-      border-radius: var(--radius);
-      overflow: hidden;
-      position: relative;
-      aspect-ratio: 4/3;
-    }
-    .video-box video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .video-label {
-      position: absolute;
-      bottom: 0.5rem;
-      left: 0.75rem;
-      background: rgba(0,0,0,0.45);
-      color: white;
-      font-size: 0.75rem;
-      font-weight: 500;
-      padding: 0.25rem 0.6rem;
-      border-radius: 100px;
-    }
+    .video-box { background: #000; border-radius: var(--radius); overflow: hidden; position: relative; aspect-ratio: 4/3; border: 1px solid #222; }
+    .video-box video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-box canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .letterbox { position: absolute; left: 0; right: 0; height: 12%; background: #000; z-index: 2; pointer-events: none; }
+    .letterbox.top { top: 0; }
+    .letterbox.bottom { bottom: 0; }
+    .video-label { position: absolute; bottom: 14%; left: 0.75rem; background: rgba(0,0,0,0.55); color: white; font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 100px; z-index: 3; }
 
-    /* CONTROLS */
-    .controls {
-      display: none;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
+    .controls { display: none; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
     .controls.visible { display: flex; }
-    .btn-capture {
-      background: var(--sage);
-      color: white;
-      font-size: 1rem;
-      padding: 0.75rem 2rem;
-      border-radius: 100px;
-      border: none;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 500;
-      transition: all 0.2s;
-      animation: pulse-btn 2s infinite;
-    }
-    .btn-capture:hover { background: var(--sage-dark); animation: none; }
-    @keyframes pulse-btn {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(122,158,126,0.4); }
-      50% { box-shadow: 0 0 0 10px rgba(122,158,126,0); }
-    }
+    .btn-capture { background: linear-gradient(135deg, var(--sage), var(--sage-dark)); color: white; font-size: 1rem; padding: 0.85rem 2.5rem; border-radius: 100px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: all 0.2s; box-shadow: 0 4px 20px rgba(122,158,126,0.4); }
+    .btn-capture:hover { transform: scale(1.04); }
 
-    /* FILTER BUTTONS */
-    .filters {
-      display: none;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .filters.visible { display: flex; }
-    .filter-btn {
-      background: var(--sage-pale);
-      color: var(--sage-dark);
-      border: 1px solid var(--sage-light);
-      border-radius: 100px;
-      padding: 0.35rem 0.9rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
-    }
-    .filter-btn:hover, .filter-btn.active { background: var(--sage); color: white; border-color: var(--sage); }
+    .countdown-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 500; }
+    .countdown-overlay.visible { display: flex; }
+    .countdown-number { font-family: 'Cormorant Garamond', serif; font-size: 10rem; font-weight: 300; color: white; animation: countPop 0.8s ease; }
+    @keyframes countPop { 0% { transform: scale(1.5); opacity: 0; } 50% { opacity: 1; } 100% { transform: scale(0.8); opacity: 0; } }
 
-    /* PHOTO STRIP */
-    .strip-section {
-      display: none;
-    }
+    .strip-section { display: none; margin-top: 2rem; }
     .strip-section.visible { display: block; }
-    .strip-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      font-weight: 400;
-      color: var(--sage-dark);
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .photo-strip {
-      background: var(--white);
-      border: 1px solid var(--sage-light);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .strip-header {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-style: italic;
-      color: var(--sage);
-      margin-bottom: 0.25rem;
-    }
-    .strip-photos {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      width: 100%;
-      max-width: 400px;
-    }
-    .strip-photo {
-      width: 100%;
-      border-radius: 8px;
-      border: 3px solid var(--sage-light);
-      display: block;
-    }
-    .strip-timestamp {
-      font-size: 0.75rem;
-      color: var(--text-light);
-      text-align: center;
-    }
-    .strip-footer {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.9rem;
-      font-style: italic;
-      color: var(--sage);
-      text-align: center;
-    }
-    .btn-download {
-      background: var(--sage-pale);
-      color: var(--sage-dark);
-      border: 1px solid var(--sage-light);
-      border-radius: 100px;
-      padding: 0.5rem 1.25rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 0.5rem;
-    }
-    .btn-download:hover { background: var(--sage-light); }
+    .strip-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--cream); text-align: center; margin-bottom: 1rem; }
+    .photo-strip-wrapper { background: #141414; border: 1px solid #2a2a2a; border-radius: var(--radius); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+    .strip-header { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: var(--sage-light); }
+    .strip-photos { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 480px; }
+    .strip-photo-wrapper { position: relative; width: 100%; }
+    .strip-photo { width: 100%; border-radius: 6px; display: block; }
+    .strip-delete-btn { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+    .strip-delete-btn:hover { background: rgba(200,50,50,0.8); }
+    .strip-timestamp { font-size: 0.75rem; color: #666; text-align: center; }
+    .strip-footer { font-family: 'Cormorant Garamond', serif; font-size: 0.88rem; font-style: italic; color: var(--sage); text-align: center; }
+    .btn-download { background: #1e1e1e; color: var(--sage-light); border: 1px solid var(--sage); border-radius: 100px; padding: 0.5rem 1.25rem; font-size: 0.85rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; text-decoration: none; display: none; margin-top: 0.25rem; }
+    .btn-download:hover { background: var(--sage-dark); color: white; }
 
-    /* FLASH */
-    .flash {
-      position: fixed;
-      inset: 0;
-      background: white;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 999;
-      transition: opacity 0.1s;
-    }
+    .flash { position: fixed; inset: 0; background: white; opacity: 0; pointer-events: none; z-index: 999; transition: opacity 0.08s; }
     .flash.active { opacity: 1; }
+    .loading-msg { text-align: center; color: #888; font-size: 0.88rem; padding: 1rem; }
 
-    @media (max-width: 600px) {
-      .video-area.visible { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 600px) { .video-area.visible { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-
 <div class="flash" id="flash"></div>
+<div class="countdown-overlay" id="countdown-overlay">
+  <div class="countdown-number" id="countdown-number">3</div>
+</div>
 
 <header class="header">
   <div class="header-inner">
     <a href="index.html" class="logo">🌿 For Starlight</a>
-    <span style="font-size:0.85rem; color:var(--text-light);">📸 Photobooth</span>
+    <span style="font-size:0.85rem;color:#888;">🎬 Cinematic Photobooth</span>
   </div>
 </header>
 
 <main>
-  <h1 class="page-title">Our Photobooth 📸</h1>
-  <p class="page-sub">Connect your cameras and take photos together, even from far away 💚</p>
+  <h1 class="page-title">Cinematic Photobooth 🎬</h1>
+  <p class="page-sub">Face filters · cinematic overlays · photo strip 💚</p>
+  <p class="loading-msg" id="loading-msg">⏳ Loading face detection models...</p>
 
-  <!-- ROOM PANEL -->
-  <div class="room-panel" id="room-panel">
+  <div class="room-panel" id="room-panel" style="display:none;">
     <h2>Enter a Room Code</h2>
-    <p style="font-size:0.88rem; color:var(--text-light); margin-bottom:1rem;">Both of you enter the same secret code to connect 💚</p>
-    <div class="room-inputs">
-      <input type="text" id="room-code" class="room-input" placeholder="e.g. starlight2026" maxlength="30" />
-    </div>
-    <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+    <p>Both of you enter the same secret code to connect 💚</p>
+    <input type="text" id="room-code" class="room-input" placeholder="e.g. starlight2026" maxlength="30"/>
+    <div class="btn-row">
       <button class="btn" onclick="startAsHost()">Create Room 🌿</button>
       <button class="btn btn-outline" onclick="joinRoom()">Join Room 💚</button>
     </div>
     <div id="status-msg"></div>
-    <div id="my-id-display" style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-light);"></div>
   </div>
 
-  <!-- FILTER BUTTONS -->
-  <div class="filters" id="filters">
-    <button class="filter-btn active" onclick="setFilter('none', this)">Normal</button>
-    <button class="filter-btn" onclick="setFilter('grayscale(100%)', this)">B&W</button>
-    <button class="filter-btn" onclick="setFilter('sepia(80%)', this)">Vintage</button>
-    <button class="filter-btn" onclick="setFilter('brightness(1.2) saturate(1.4)', this)">Vivid</button>
-    <button class="filter-btn" onclick="setFilter('hue-rotate(120deg)', this)">Dreamy</button>
+  <!-- STICKER + FILTER PANEL -->
+  <div class="sticker-panel" id="sticker-panel">
+    <div class="panel-label">🎭 Face Filters</div>
+    <div class="sticker-row">
+      <button class="sticker-btn active" onclick="setSticker('none', this)">None</button>
+      <button class="sticker-btn" onclick="setSticker('spiderman', this)">🕷️ Spiderman</button>
+      <button class="sticker-btn" onclick="setSticker('crown', this)">👑 Crown</button>
+      <button class="sticker-btn" onclick="setSticker('catears', this)">🐱 Cat Ears</button>
+      <button class="sticker-btn" onclick="setSticker('sunglasses', this)">😎 Sunglasses</button>
+      <button class="sticker-btn" onclick="setSticker('hearts', this)">💚 Heart Eyes</button>
+      <button class="sticker-btn" onclick="setSticker('flowers', this)">🌸 Flower Crown</button>
+    </div>
+    <div class="panel-label" style="margin-top:0.75rem;">🎬 Cinematic Filter</div>
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="setFilter('normal',this)">Normal</button>
+      <button class="filter-btn" onclick="setFilter('golden',this)">🌅 Golden Hour</button>
+      <button class="filter-btn" onclick="setFilter('teal',this)">🩵 Teal & Orange</button>
+      <button class="filter-btn" onclick="setFilter('noir',this)">🖤 Noir</button>
+      <button class="filter-btn" onclick="setFilter('moody',this)">🌌 Moody</button>
+      <button class="filter-btn" onclick="setFilter('vintage',this)">📽️ Vintage</button>
+      <button class="filter-btn" onclick="setFilter('soft',this)">🌸 Soft Glow</button>
+    </div>
   </div>
 
   <!-- VIDEO AREA -->
   <div class="video-area" id="video-area">
     <div class="video-box">
       <video id="my-video" autoplay muted playsinline></video>
+      <canvas id="my-canvas"></canvas>
+      <div class="letterbox top"></div>
+      <div class="letterbox bottom"></div>
       <div class="video-label">You 💚</div>
     </div>
     <div class="video-box">
       <video id="remote-video" autoplay playsinline></video>
+      <canvas id="remote-canvas"></canvas>
+      <div class="letterbox top"></div>
+      <div class="letterbox bottom"></div>
       <div class="video-label">Starlight 🌟</div>
     </div>
   </div>
 
-  <!-- CAPTURE BUTTON -->
   <div class="controls" id="controls">
-    <button class="btn-capture" onclick="capturePhoto()">📸 Take Photo Together!</button>
+    <button class="btn-capture" onclick="startCountdown()">📸 Take Photo Together!</button>
     <button class="btn btn-outline" onclick="disconnectCall()">End Call</button>
   </div>
 
-  <!-- PHOTO STRIP -->
   <div class="strip-section" id="strip-section">
-    <p class="strip-title">Your Photo Strip 🎞️</p>
-    <div class="photo-strip">
+    <p class="strip-title">Your Cinematic Strip 🎞️</p>
+    <div class="photo-strip-wrapper">
       <div class="strip-header">🌿 For Starlight, with love</div>
       <div class="strip-photos" id="strip-photos"></div>
       <div class="strip-timestamp" id="strip-timestamp"></div>
       <div class="strip-footer">"I love you with an everlasting love." — Jeremiah 31:3</div>
-      <a class="btn-download" id="download-btn" href="#" download="our-photobooth.png" style="display:none;">⬇ Download Strip</a>
+      <a class="btn-download" id="download-btn" href="#" download="cinematic-strip.png">⬇ Download Strip</a>
     </div>
   </div>
-
 </main>
 
 <script>
-  let peer, myStream, currentCall;
-  let currentFilter = 'none';
-  let photoCount = 0;
-  const MAX_PHOTOS = 4;
+let peer, myStream, currentCall;
+let photoCount = 0;
+const MAX_PHOTOS = 4;
+let currentFilter = 'normal';
+let currentSticker = 'none';
+let modelsLoaded = false;
+let myDetectionInterval, remoteDetectionInterval;
 
-  function getRoomCode() {
-    return document.getElementById('room-code').value.trim().toLowerCase().replace(/\s+/g, '-');
+const cinemaFilters = {
+  normal:  { css: 'none', overlay: 'transparent' },
+  golden:  { css: 'brightness(1.05) saturate(1.3) sepia(0.25)', overlay: 'rgba(255,180,50,0.08)' },
+  teal:    { css: 'brightness(1.0) saturate(1.4) hue-rotate(5deg)', overlay: 'rgba(0,80,100,0.10)' },
+  noir:    { css: 'grayscale(100%) contrast(1.2) brightness(0.9)', overlay: 'transparent' },
+  moody:   { css: 'brightness(0.88) saturate(0.8) hue-rotate(200deg)', overlay: 'rgba(20,30,80,0.15)' },
+  vintage: { css: 'sepia(60%) contrast(1.1) brightness(0.95)', overlay: 'rgba(120,60,20,0.08)' },
+  soft:    { css: 'brightness(1.08) saturate(1.1) contrast(0.95)', overlay: 'rgba(255,220,220,0.07)' },
+};
+
+// ===== LOAD MODELS =====
+async function loadModels() {
+  try {
+    await faceapi.nets.tinyFaceDetector.loadFromUri('./models');
+    await faceapi.nets.faceLandmark68Net.loadFromUri('./models');
+    modelsLoaded = true;
+    document.getElementById('loading-msg').textContent = '✅ Face detection ready!';
+    setTimeout(() => document.getElementById('loading-msg').style.display = 'none', 1500);
+    document.getElementById('room-panel').style.display = 'block';
+  } catch(e) {
+    document.getElementById('loading-msg').textContent = '⚠️ Could not load face models. Photobooth will work without face filters.';
+    document.getElementById('room-panel').style.display = 'block';
   }
+}
 
-  function showStatus(msg, type) {
-    const el = document.getElementById('status-msg');
-    el.innerHTML = '<div class="status-badge status-' + type + '">' + msg + '</div>';
-  }
+// ===== DRAW STICKER ON CANVAS =====
+function drawSticker(ctx, landmarks, videoW, videoH, sticker) {
+  if (sticker === 'none' || !landmarks) return;
 
-  async function getMedia() {
-    try {
-      myStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-      document.getElementById('my-video').srcObject = myStream;
-      return true;
-    } catch(e) {
-      showStatus('Camera access denied. Please allow camera access.', 'error');
-      return false;
+  const jaw = landmarks.getJawOutline();
+  const nose = landmarks.getNose();
+  const leftEye = landmarks.getLeftEye();
+  const rightEye = landmarks.getRightEye();
+  const mouth = landmarks.getMouth();
+
+  const faceLeft = jaw[0];
+  const faceRight = jaw[16];
+  const faceTop = landmarks.positions[19]; // forehead approx
+  const faceW = faceRight.x - faceLeft.x;
+  const faceH = faceW * 1.3;
+  const faceCenterX = (faceLeft.x + faceRight.x) / 2;
+  const eyeY = (leftEye[0].y + rightEye[3].y) / 2;
+
+  ctx.save();
+
+  if (sticker === 'spiderman') {
+    // Draw Spiderman mask using canvas shapes
+    const x = faceLeft.x - faceW * 0.1;
+    const y = faceTop.y - faceH * 0.2;
+    const w = faceW * 1.2;
+    const h = faceH * 1.3;
+
+    // Red face
+    ctx.beginPath();
+    ctx.ellipse(faceCenterX, y + h * 0.45, w/2, h/2, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#cc0000';
+    ctx.fill();
+
+    // Web lines
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 1.5;
+    // Radial lines from center
+    const cx = faceCenterX, cy = y + h * 0.3;
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(angle) * w, cy + Math.sin(angle) * w);
+      ctx.stroke();
+    }
+    // Concentric arcs
+    for (let r = faceW * 0.1; r < faceW * 0.8; r += faceW * 0.12) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Eyes (white with black outline)
+    const eyeW = faceW * 0.28, eyeH = faceH * 0.18;
+    [[leftEye[0].x + eyeW*0.1, eyeY], [rightEye[0].x - eyeW*0.1, eyeY]].forEach(([ex, ey]) => {
+      ctx.beginPath();
+      ctx.ellipse(ex + eyeW/2, ey, eyeW/2, eyeH/2, -0.3, 0, Math.PI*2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+
+  } else if (sticker === 'crown') {
+    const crownY = faceTop.y - faceH * 0.35;
+    const crownW = faceW * 1.1;
+    const crownH = faceH * 0.3;
+    const crownX = faceCenterX - crownW / 2;
+
+    ctx.fillStyle = '#FFD700';
+    ctx.strokeStyle = '#B8860B';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(crownX, crownY + crownH);
+    ctx.lineTo(crownX, crownY + crownH * 0.4);
+    ctx.lineTo(crownX + crownW * 0.25, crownY + crownH * 0.7);
+    ctx.lineTo(crownX + crownW * 0.5, crownY);
+    ctx.lineTo(crownX + crownW * 0.75, crownY + crownH * 0.7);
+    ctx.lineTo(crownX + crownW, crownY + crownH * 0.4);
+    ctx.lineTo(crownX + crownW, crownY + crownH);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Gems
+    [0.2, 0.5, 0.8].forEach((p, i) => {
+      ctx.beginPath();
+      ctx.arc(crownX + crownW * p, crownY + crownH * (i === 1 ? 0.15 : 0.5), faceW * 0.04, 0, Math.PI * 2);
+      ctx.fillStyle = i === 1 ? '#ff4444' : '#44aaff';
+      ctx.fill();
+    });
+
+  } else if (sticker === 'catears') {
+    const earH = faceH * 0.35;
+    const earW = faceW * 0.28;
+    const earY = faceTop.y - faceH * 0.15;
+
+    [faceCenterX - faceW * 0.3, faceCenterX + faceW * 0.3].forEach(ex => {
+      // Outer ear
+      ctx.beginPath();
+      ctx.moveTo(ex - earW/2, earY + earH);
+      ctx.lineTo(ex, earY);
+      ctx.lineTo(ex + earW/2, earY + earH);
+      ctx.closePath();
+      ctx.fillStyle = '#ff88bb';
+      ctx.fill();
+      ctx.strokeStyle = '#cc5599';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      // Inner ear
+      ctx.beginPath();
+      ctx.moveTo(ex - earW*0.3, earY + earH * 0.8);
+      ctx.lineTo(ex, earY + earH * 0.2);
+      ctx.lineTo(ex + earW*0.3, earY + earH * 0.8);
+      ctx.closePath();
+      ctx.fillStyle = '#ffbbdd';
+      ctx.fill();
+    });
+
+  } else if (sticker === 'sunglasses') {
+    const glassY = eyeY;
+    const glassW = faceW * 0.38;
+    const glassH = faceH * 0.13;
+    const gap = faceW * 0.06;
+    const lx = faceCenterX - gap/2 - glassW;
+    const rx = faceCenterX + gap/2;
+
+    ctx.fillStyle = 'rgba(0,0,0,0.85)';
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 2;
+
+    [lx, rx].forEach(x => {
+      ctx.beginPath();
+      ctx.roundRect(x, glassY - glassH/2, glassW, glassH, glassH/2);
+      ctx.fill();
+      ctx.stroke();
+    });
+    // Bridge
+    ctx.beginPath();
+    ctx.moveTo(lx + glassW, glassY);
+    ctx.lineTo(rx, glassY);
+    ctx.strokeStyle = '#555';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Arms
+    ctx.beginPath();
+    ctx.moveTo(lx, glassY);
+    ctx.lineTo(lx - faceW * 0.15, glassY - glassH * 0.3);
+    ctx.moveTo(rx + glassW, glassY);
+    ctx.lineTo(rx + glassW + faceW * 0.15, glassY - glassH * 0.3);
+    ctx.strokeStyle = '#333';
+    ctx.stroke();
+
+  } else if (sticker === 'hearts') {
+    [[leftEye, '#ff4466'], [rightEye, '#ff4466']].forEach(([eye, color]) => {
+      const cx = eye.reduce((s,p) => s + p.x, 0) / eye.length;
+      const cy = eye.reduce((s,p) => s + p.y, 0) / eye.length;
+      const size = faceW * 0.1;
+      ctx.font = `${size * 2}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('💚', cx, cy);
+    });
+
+  } else if (sticker === 'flowers') {
+    const flowerY = faceTop.y - faceH * 0.1;
+    const count = 7;
+    for (let i = 0; i < count; i++) {
+      const fx = faceLeft.x + (faceW / (count - 1)) * i;
+      const fy = flowerY - Math.sin((i / (count-1)) * Math.PI) * faceH * 0.12;
+      const size = faceW * 0.07;
+      ctx.font = `${size * 2}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(i % 2 === 0 ? '🌸' : '🌼', fx, fy);
     }
   }
 
-  async function startAsHost() {
-    const code = getRoomCode();
-    if (!code) { showStatus('Please enter a room code first!', 'error'); return; }
-    const ok = await getMedia();
-    if (!ok) return;
+  ctx.restore();
+}
 
-    peer = new Peer('starlight-room-' + code);
-    peer.on('open', function(id) {
-      showStatus('Room created! Waiting for Starlight to join... 🌿', 'waiting');
-      document.getElementById('my-id-display').textContent = 'Room code: ' + code;
-    });
-    peer.on('call', function(call) {
-      currentCall = call;
-      call.answer(myStream);
-      call.on('stream', function(remoteStream) {
-        document.getElementById('remote-video').srcObject = remoteStream;
-        onConnected();
-      });
-    });
-    peer.on('error', function(e) {
-      showStatus('Room already exists or error. Try a different code!', 'error');
-    });
-  }
-
-  async function joinRoom() {
-    const code = getRoomCode();
-    if (!code) { showStatus('Please enter the room code!', 'error'); return; }
-    const ok = await getMedia();
-    if (!ok) return;
-
-    peer = new Peer();
-    peer.on('open', function(id) {
-      showStatus('Connecting to room... 💚', 'waiting');
-      const call = peer.call('starlight-room-' + code, myStream);
-      currentCall = call;
-      call.on('stream', function(remoteStream) {
-        document.getElementById('remote-video').srcObject = remoteStream;
-        onConnected();
-      });
-      call.on('error', function(e) {
-        showStatus('Could not connect. Make sure the room code is correct!', 'error');
-      });
-    });
-  }
-
-  function onConnected() {
-    showStatus('Connected! 💚 You can see each other now!', 'connected');
-    document.getElementById('video-area').classList.add('visible');
-    document.getElementById('controls').classList.add('visible');
-    document.getElementById('filters').classList.add('visible');
-    document.getElementById('strip-section').classList.add('visible');
-  }
-
-  function setFilter(filter, btn) {
-    currentFilter = filter;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('my-video').style.filter = filter;
-    document.getElementById('remote-video').style.filter = filter;
-  }
-
-  function capturePhoto() {
-    if (photoCount >= MAX_PHOTOS) {
-      alert('You already have ' + MAX_PHOTOS + ' photos! Delete one first 💚');
+// ===== FACE DETECTION LOOP =====
+async function startDetection(videoEl, canvasEl) {
+  const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 });
+  return setInterval(async () => {
+    if (!modelsLoaded || currentSticker === 'none') {
+      const ctx = canvasEl.getContext('2d');
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
       return;
     }
+    canvasEl.width = videoEl.videoWidth || videoEl.clientWidth;
+    canvasEl.height = videoEl.videoHeight || videoEl.clientHeight;
+    const result = await faceapi.detectAllFaces(videoEl, options).withFaceLandmarks();
+    const ctx = canvasEl.getContext('2d');
+    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+    result.forEach(r => drawSticker(ctx, r.landmarks, canvasEl.width, canvasEl.height, currentSticker));
+  }, 100);
+}
 
-    const flash = document.getElementById('flash');
-    flash.classList.add('active');
-    setTimeout(() => flash.classList.remove('active'), 300);
+function setSticker(name, btn) {
+  currentSticker = name;
+  document.querySelectorAll('.sticker-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
 
-    const myVideo = document.getElementById('my-video');
-    const remoteVideo = document.getElementById('remote-video');
+function setFilter(name, btn) {
+  currentFilter = name;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const f = cinemaFilters[name];
+  document.getElementById('my-video').style.filter = f.css;
+  document.getElementById('remote-video').style.filter = f.css;
+}
 
-    const canvas = document.createElement('canvas');
-    const w = 640, h = 240;
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext('2d');
+// ===== ROOM =====
+function getRoomCode() { return document.getElementById('room-code').value.trim().toLowerCase().replace(/\s+/g,'-'); }
+function showStatus(msg, type) { document.getElementById('status-msg').innerHTML = '<div class="status-badge status-'+type+'">'+msg+'</div>'; }
 
-    ctx.filter = currentFilter === 'none' ? 'none' : currentFilter;
-    ctx.drawImage(myVideo, 0, 0, w/2, h);
-    ctx.drawImage(remoteVideo, w/2, 0, w/2, h);
+async function getMedia() {
+  try {
+    myStream = await navigator.mediaDevices.getUserMedia({ video: { width:{ideal:1920}, height:{ideal:1080}, facingMode:'user', frameRate:{ideal:30} }, audio: false });
+    document.getElementById('my-video').srcObject = myStream;
+    return true;
+  } catch(e) { showStatus('Camera access denied! 📸', 'error'); return false; }
+}
 
-    ctx.filter = 'none';
-    ctx.fillStyle = 'rgba(122,158,126,0.6)';
-    ctx.fillRect(w/2 - 1, 0, 2, h);
+async function startAsHost() {
+  const code = getRoomCode();
+  if (!code) { showStatus('Enter a room code first!', 'error'); return; }
+  const ok = await getMedia();
+  if (!ok) return;
+  peer = new Peer('starlight-room-' + code);
+  peer.on('open', () => showStatus('Room created! Waiting for Starlight... 🌿', 'waiting'));
+  peer.on('call', call => {
+    currentCall = call;
+    call.answer(myStream);
+    call.on('stream', remoteStream => { document.getElementById('remote-video').srcObject = remoteStream; onConnected(); });
+  });
+  peer.on('error', () => showStatus('Room exists or error. Try different code!', 'error'));
+}
 
-    const imgData = canvas.toDataURL('image/png');
+async function joinRoom() {
+  const code = getRoomCode();
+  if (!code) { showStatus('Enter the room code!', 'error'); return; }
+  const ok = await getMedia();
+  if (!ok) return;
+  peer = new Peer();
+  peer.on('open', () => {
+    showStatus('Connecting... 💚', 'waiting');
+    const call = peer.call('starlight-room-' + code, myStream);
+    currentCall = call;
+    call.on('stream', remoteStream => { document.getElementById('remote-video').srcObject = remoteStream; onConnected(); });
+  });
+}
 
-    const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'position:relative; width:100%;';
+async function onConnected() {
+  showStatus('Connected! 💚 You can see each other!', 'connected');
+  document.getElementById('video-area').classList.add('visible');
+  document.getElementById('controls').classList.add('visible');
+  document.getElementById('sticker-panel').classList.add('visible');
+  document.getElementById('strip-section').classList.add('visible');
 
-    const img = document.createElement('img');
-    img.src = imgData;
-    img.className = 'strip-photo';
+  await new Promise(r => setTimeout(r, 500));
+  myDetectionInterval = await startDetection(document.getElementById('my-video'), document.getElementById('my-canvas'));
+  remoteDetectionInterval = await startDetection(document.getElementById('remote-video'), document.getElementById('remote-canvas'));
+}
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = '✕';
-    deleteBtn.style.cssText = 'position:absolute; top:6px; right:6px; background:rgba(0,0,0,0.5); color:white; border:none; border-radius:50%; width:26px; height:26px; cursor:pointer; font-size:0.8rem; font-weight:bold;';
-    deleteBtn.onclick = function() {
-      wrapper.remove();
-      photoCount--;
-      document.getElementById('download-btn').style.display = 'none';
-      updateTimestamp();
-    };
-
-    wrapper.appendChild(img);
-    wrapper.appendChild(deleteBtn);
-    document.getElementById('strip-photos').appendChild(wrapper);
-
-    photoCount++;
-    updateTimestamp();
-
-    if (photoCount >= MAX_PHOTOS) {
-      generateDownload();
-    }
-  }
-
-  function updateTimestamp() {
-    if (photoCount > 0) {
-      const now = new Date();
-      document.getElementById('strip-timestamp').textContent = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + ' · ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+// ===== COUNTDOWN =====
+function startCountdown() {
+  if (photoCount >= MAX_PHOTOS) { alert('4 photos max! Delete one first 💚'); return; }
+  const overlay = document.getElementById('countdown-overlay');
+  const numEl = document.getElementById('countdown-number');
+  overlay.classList.add('visible');
+  let count = 3;
+  numEl.textContent = count;
+  const timer = setInterval(() => {
+    count--;
+    if (count > 0) {
+      numEl.textContent = count;
+      numEl.style.animation = 'none';
+      void numEl.offsetWidth;
+      numEl.style.animation = 'countPop 0.8s ease';
     } else {
-      document.getElementById('strip-timestamp').textContent = '';
+      clearInterval(timer);
+      overlay.classList.remove('visible');
+      capturePhoto();
     }
+  }, 1000);
+}
+
+// ===== CAPTURE =====
+function capturePhoto() {
+  const flash = document.getElementById('flash');
+  flash.classList.add('active');
+  setTimeout(() => flash.classList.remove('active'), 200);
+
+  const myVideo = document.getElementById('my-video');
+  const remoteVideo = document.getElementById('remote-video');
+  const myCanvas = document.getElementById('my-canvas');
+  const remoteCanvas = document.getElementById('remote-canvas');
+  const f = cinemaFilters[currentFilter];
+
+  const W = 1280, H = 360;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.filter = f.css;
+  ctx.drawImage(myVideo, 0, 0, W/2, H);
+  ctx.drawImage(remoteVideo, W/2, 0, W/2, H);
+  ctx.filter = 'none';
+
+  // Draw sticker overlays from canvases
+  if (currentSticker !== 'none') {
+    ctx.drawImage(myCanvas, 0, 0, W/2, H);
+    ctx.drawImage(remoteCanvas, W/2, 0, W/2, H);
   }
 
-    // Flash effect
-    const flash = document.getElementById('flash');
-    flash.classList.add('active');
-    setTimeout(() => flash.classList.remove('active'), 300);
+  if (f.overlay !== 'transparent') { ctx.fillStyle = f.overlay; ctx.fillRect(0, 0, W, H); }
 
-    // Draw both videos side by side on canvas
-    const myVideo = document.getElementById('my-video');
-    const remoteVideo = document.getElementById('remote-video');
+  // Letterbox
+  const lbH = Math.round(H * 0.12);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, lbH);
+  ctx.fillRect(0, H - lbH, W, lbH);
 
-    const canvas = document.createElement('canvas');
-    const w = 640, h = 240;
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext('2d');
+  // Divider
+  ctx.fillStyle = 'rgba(181,206,184,0.5)';
+  ctx.fillRect(W/2 - 1, 0, 2, H);
 
-    // Apply filter
-    ctx.filter = currentFilter === 'none' ? 'none' : currentFilter;
-    ctx.drawImage(myVideo, 0, 0, w/2, h);
-    ctx.drawImage(remoteVideo, w/2, 0, w/2, h);
+  const imgData = canvas.toDataURL('image/png');
+  const wrapper = document.createElement('div');
+  wrapper.className = 'strip-photo-wrapper';
+  const img = document.createElement('img');
+  img.src = imgData;
+  img.className = 'strip-photo';
+  const delBtn = document.createElement('button');
+  delBtn.className = 'strip-delete-btn';
+  delBtn.textContent = '✕';
+  delBtn.onclick = function() {
+    wrapper.remove(); photoCount--;
+    document.getElementById('download-btn').style.display = 'none';
+    updateTimestamp();
+  };
+  wrapper.appendChild(img);
+  wrapper.appendChild(delBtn);
+  document.getElementById('strip-photos').appendChild(wrapper);
+  photoCount++;
+  updateTimestamp();
+  if (photoCount >= MAX_PHOTOS) generateDownload();
+}
 
-    // Add heart divider
-    ctx.filter = 'none';
-    ctx.fillStyle = 'rgba(122,158,126,0.6)';
-    ctx.fillRect(w/2 - 1, 0, 2, h);
-
-    const imgData = canvas.toDataURL('image/png');
-    const img = document.createElement('img');
-    img.src = imgData;
-    img.className = 'strip-photo';
-    document.getElementById('strip-photos').appendChild(img);
-
-    photoCount++;
+function updateTimestamp() {
+  const el = document.getElementById('strip-timestamp');
+  if (photoCount > 0) {
     const now = new Date();
-    document.getElementById('strip-timestamp').textContent = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + ' · ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    el.textContent = now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) + ' · ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  } else el.textContent = '';
+}
 
-    if (photoCount >= MAX_PHOTOS) {
-      generateDownload();
-    }
-  }
+function generateDownload() {
+  const photos = document.querySelectorAll('.strip-photo');
+  if (!photos.length) return;
+  const PW=1280,PH=360,gap=8,pad=24,headerH=60,footerH=40;
+  const sc = document.createElement('canvas');
+  sc.width = PW+pad*2;
+  sc.height = headerH+(PH+gap)*photos.length+footerH+pad;
+  const ctx = sc.getContext('2d');
+  ctx.fillStyle='#0a0a0a'; ctx.fillRect(0,0,sc.width,sc.height);
+  ctx.fillStyle='#7a9e7e'; ctx.font='italic 22px Georgia,serif'; ctx.textAlign='center';
+  ctx.fillText('🌿 For Starlight, with love 💚', sc.width/2, pad+30);
+  photos.forEach((img,i) => ctx.drawImage(img,pad,headerH+i*(PH+gap),PW,PH));
+  ctx.fillStyle='#4a6b4e'; ctx.font='italic 14px Georgia,serif';
+  ctx.fillText('"I love you with an everlasting love." — Jeremiah 31:3', sc.width/2, sc.height-14);
+  const link = document.getElementById('download-btn');
+  link.href = sc.toDataURL('image/png');
+  link.style.display = 'inline-block';
+}
 
-  function generateDownload() {
-    const photos = document.querySelectorAll('.strip-photo');
-    if (photos.length === 0) return;
+function disconnectCall() {
+  clearInterval(myDetectionInterval); clearInterval(remoteDetectionInterval);
+  if (currentCall) currentCall.close();
+  if (myStream) myStream.getTracks().forEach(t=>t.stop());
+  if (peer) peer.destroy();
+  document.getElementById('video-area').classList.remove('visible');
+  document.getElementById('controls').classList.remove('visible');
+  document.getElementById('sticker-panel').classList.remove('visible');
+  showStatus('Call ended. Start a new room to reconnect 💚', 'waiting');
+}
 
-    const stripCanvas = document.createElement('canvas');
-    const pw = 640, ph = 240;
-    const padding = 20;
-    stripCanvas.width = pw + padding * 2;
-    stripCanvas.height = (ph + 10) * photos.length + padding * 2 + 60;
-
-    const ctx = stripCanvas.getContext('2d');
-    ctx.fillStyle = '#faf8f3';
-    ctx.fillRect(0, 0, stripCanvas.width, stripCanvas.height);
-
-    // Header
-    ctx.fillStyle = '#4a6b4e';
-    ctx.font = 'italic 22px Georgia';
-    ctx.textAlign = 'center';
-    ctx.fillText('🌿 For Starlight, with love 💚', stripCanvas.width / 2, padding + 28);
-
-    photos.forEach(function(img, i) {
-      ctx.drawImage(img, padding, padding + 50 + i * (ph + 10), pw, ph);
-    });
-
-    // Footer
-    ctx.fillStyle = '#7a9e7e';
-    ctx.font = 'italic 14px Georgia';
-    ctx.fillText('"I love you with an everlasting love." — Jeremiah 31:3', stripCanvas.width / 2, stripCanvas.height - padding);
-
-    const link = document.getElementById('download-btn');
-    link.href = stripCanvas.toDataURL('image/png');
-    link.style.display = 'inline-block';
-  }
-
-  function disconnectCall() {
-    if (currentCall) currentCall.close();
-    if (myStream) myStream.getTracks().forEach(t => t.stop());
-    if (peer) peer.destroy();
-    document.getElementById('video-area').classList.remove('visible');
-    document.getElementById('controls').classList.remove('visible');
-    document.getElementById('filters').classList.remove('visible');
-    showStatus('Call ended. Start a new room to reconnect 💚', 'waiting');
-  }
+// Init
+loadModels();
 </script>
-
 </body>
 </html>
